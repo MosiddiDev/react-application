@@ -29,6 +29,10 @@
 			    });
 			}
 
+			$scope.selectContact = function(contact){
+				$scope.selectedContact = contact;
+			}
+
 			$scope.refresh();
 			$scope.$apply();
 		});

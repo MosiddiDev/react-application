@@ -13,38 +13,65 @@
 
 <body>
 
+<!-- The aPP -->
 <div class="app-window" ng-app="app" ng-controller="ctrl">
-	<span>Search: <input type="text" ng-model="query" ng-change="refresh()"></span>
-	<span>
-		<label for="first-name">FirstName</label>
-		<input type='radio' id="first-name" name="searchFilter" ng-model="searchFilter" ng-click="refresh()" value="first_name" checked>
-		<label for="last-name">LastName</label>
-		<input type='radio' id="last-name" name="searchFilter" ng-model="searchFilter" ng-click="refresh()" value="last_name">
-	</span>
-	<label for="page-results">Results per page: </label>
-	<select id="page-results" ng-model="pageResults" ng-change="refresh()">
-		<option value="10" selected>10</option>
-		<option value="20">20</option>
-		<option value="50">50</option>
-	</select>
-	<div class="contact-list">
+	
+	<!-- User Search Input Area -->
+	<div class="user-input-box">
+		<span class="search-box">Search: <input type="text" ng-model="query" ng-change="refresh()"></span>
+		<span class="search-filter-box">
+			<span class="search-filter">
+				<label for="first-name">FirstName</label>
+				<input type='radio' id="first-name" name="searchFilter" ng-model="searchFilter" ng-click="refresh()" value="first_name" checked>
+			</span>
+			<span class="search-filter">
+				<label for="last-name">LastName</label>
+				<input type='radio' id="last-name" name="searchFilter" ng-model="searchFilter" ng-click="refresh()" value="last_name">
+			</span>
+		</span>
+		<span class="page-range-box">
+			<label for="page-results">Results per page: </label>
+			<select id="page-results" ng-model="pageResults" ng-change="refresh()">
+				<option value="10" selected>10</option>
+				<option value="20">20</option>
+				<option value="50">50</option>
+			</select>
+		</span>
+	</div>
+
+	<!-- Contact List (Filtered Results) -->
+	<div class="contact-list" ng-hide="selectedContact">
 		<div class="contact" ng-repeat="contact in displayedContacts">
-			{{ ($index + 1) * (currentPageIndex + 1) }}
-			<div>
-				<span>{{ contact.first_name }}</span>
-				<span>{{ contact.last_name }}</span>
+			{{ (pageResults * currentPageIndex) + ($index + 1) }}
+			<div class="name">
+				<span class="name-first">{{ contact.first_name }}&nbsp</span>
+				<span class="name-last">{{ contact.last_name }}</span>
 			</div>
-			<div>{{ contact.address }}</div>
-			<div>
-				<span>{{ contact.city }}</span>
-				<span>{{ contact.state }}</span>
-				<span>{{ contact.zip }}</span>
+			<div class="location">
+				<span class="location-city">{{ contact.city }},&nbsp</span>
+				<span class="location-state">{{ contact.state }}</span>
 			</div>
-			<div>{{ contact.email }}</div>
-			<div>{{ contact.phone }}</div>
-			<div>{{ contact.join_date }}</div>
+			<input class="info-button" type="button" value="Info" ng-click="selectContact(contact)">
 		</div>
 		<span class="pagination" ng-repeat="x in pageRange"><button class="page-button page-{{ x }}" ng-click="refresh($index)">{{ x }}</button></span>
+	</div>
+
+	<!-- Selected Contact Details -->
+	<div class="contact-details" ng-show="selectedContact">
+		<input class="back-button" type="button" value="Back" ng-click="selectContact()">
+		<div class="name">
+			<span class="name-first">{{ selectedContact.first_name }}&nbsp</span>
+			<span class="name-last">{{ selectedContact.last_name }}</span>
+		</div>
+		<div class="location">
+			<div class="location-address">{{ selectedContact.address }}</div>
+			<span class="location-city">{{ selectedContact.city }},&nbsp</span>
+			<span class="location-state">{{ selectedContact.state }}&nbsp</span>
+			<span class="location-zip">{{ selectedContact.zip }}</span>
+		</div>
+		<div class="location-email">{{ selectedContact.email }}</div>
+		<div class="location-phone">{{ selectedContact.phone }}</div>
+		<div class="location-join_date">{{ selectedContact.join_date }}</div>
 	</div>
 
 </div>
