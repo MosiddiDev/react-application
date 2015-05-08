@@ -3,14 +3,50 @@
 
 <head>
 <link rel="stylesheet" type="text/css" href="css/core.css">
-<script data-main="js/require_config" src="requirejs/require.js"></script>
+<script data-main="js/require_config" src="angular/angular.min.js"></script>
+<script data-main="js/require_config" src="js/utils.js"></script>
+<script data-main="js/require_config" src="js/app-module.js"></script>
+<script type="text/javascript">
+
+</script>
 </head>
 
 <body>
 
-<div class="system" ng-app="">
-	<p>Name: <input type="text" ng-model="name"></p>
-	<p>{{name}}</p>
+<div class="app-window" ng-app="app" ng-controller="ctrl">
+	<span>Search: <input type="text" ng-model="query" ng-change="refresh()"></span>
+	<span>
+		<label for="first-name">FirstName</label>
+		<input type='radio' id="first-name" name="searchFilter" ng-model="searchFilter" ng-click="refresh()" value="first_name" checked>
+		<label for="last-name">LastName</label>
+		<input type='radio' id="last-name" name="searchFilter" ng-model="searchFilter" ng-click="refresh()" value="last_name">
+	</span>
+	<label for="page-results">Results per page: </label>
+	<select id="page-results" ng-model="pageResults" ng-change="refresh()">
+		<option value="10" selected>10</option>
+		<option value="20">20</option>
+		<option value="50">50</option>
+	</select>
+	<div class="contact-list">
+		<div class="contact" ng-repeat="contact in displayedContacts">
+			{{ ($index + 1) * (currentPageIndex + 1) }}
+			<div>
+				<span>{{ contact.first_name }}</span>
+				<span>{{ contact.last_name }}</span>
+			</div>
+			<div>{{ contact.address }}</div>
+			<div>
+				<span>{{ contact.city }}</span>
+				<span>{{ contact.state }}</span>
+				<span>{{ contact.zip }}</span>
+			</div>
+			<div>{{ contact.email }}</div>
+			<div>{{ contact.phone }}</div>
+			<div>{{ contact.join_date }}</div>
+		</div>
+		<span class="pagination" ng-repeat="x in pageRange"><button class="page-button page-{{ x }}" ng-click="refresh($index)">{{ x }}</button></span>
+	</div>
+
 </div>
 
 </body>
