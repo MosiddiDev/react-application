@@ -1,0 +1,42 @@
+.app-window>div{
+	margin: 0 auto;
+	width: 500px;
+}
+
+.app-loading{
+	margin: 0 auto;
+}
+
+.student-list .student{
+	border: 1px solid lightgray;
+	cursor: pointer;
+}
+.student-list .student ng-md-icon{
+	padding: 10px;
+}
+.student-list .student button{
+	padding-top: 5px;
+}
+
+
+.back-button{
+	margin-left: -100px !important;
+	float: left !important;
+}
+.save-button{
+	float: right;
+}
+
+fieldset{
+	border: none;
+}
+.info-labels, .info-values{
+	float: left;
+}
+.info-labels{
+	color: darkgray;
+}
+.info-values{
+	margin-left: 70px;
+}
+

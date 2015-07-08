@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "express": "~4.9.x",
-    "angular": "~1.3.x"
+    "angular": "~1.3.x",
+    "request": "~2.58.x",
+    "body-parser": "~1.13.x"
   },
   "engines": {
     "node": "0.10.x"
