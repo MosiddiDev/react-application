@@ -13,8 +13,6 @@
 		}
 
 		$scope.submitData = function(){
-			var test = $scope.selectedStudent;
-			console.log(test);
 			$http.post('/service/'+ ($scope.selectedStudent.id || ''), $scope.selectedStudent);
 			$scope.loading = true;
 			$scope.route($scope.list_view)
@@ -24,7 +22,7 @@
 			var confirm = $mdDialog.confirm()
 			.parent(angular.element(document.body))
 			.title('Delete Confirm')
-			.content('Are you sure you want to delete the current student? all recods will be removed!')
+			.content('Are you sure you want to delete the current student? all records will be removed!')
 			.ariaLabel('Delete Confirm')
 			.ok('Delete')
 			.cancel('Keep User')
