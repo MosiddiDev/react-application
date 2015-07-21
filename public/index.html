@@ -1,52 +1,20 @@
 <!DOCTYPE html>
 <html>
+    <!-- Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>-->
 
-<head>
-	<!-- Angular Material CSS -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.css">
-	<link rel="stylesheet" href="/app.css">
+    <!-- React -->
+    <script src="https://fb.me/react-0.13.3.min.js"></script>
+    <script src="https://fb.me/JSXTransformer-0.13.3.js"></script>
+    <script src="/react-dnd/dist/ReactDnD.min.js"></script>
 
-    <!-- Angular Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-aria.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-route.js"></script>
-
-
-    <!-- Angular Material Javascript -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.0/angular-material.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-material-icons/0.5.0/angular-material-icons.min.js"></script> 
-	<script src="/app-module.js"></script>
+    <!--Custom Styles -->
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <title>React Component</title>
 </head>
-
 <body>
-
-<!-- The aPP -->
-	<md-content class="app-window" ng-app="studentManagementApp" ng-controller="studentManager">
-		<!-- Toolbar -->
-		 <md-toolbar>
-	      <div class="md-toolbar-tools">
-	        <md-button class="md-icon-button" aria-label="Back" ng-click="route(list_view)">
-	          <ng-md-icon icon="menu" size="35"></ng-md-icon>
-	        </md-button>
-	        <h2>
-	          <span>SMS<ng-md-icon icon="language" size="40"></ng-md-icon>Global</span>&nbsp
-	          <span><small>All the records all the time!</small></span>
-	        </h2>
-	        <span flex></span>
-	        <md-button class="md-icon-button" aria-label="Add" ng-click="route(form_view)">
-	          <ng-md-icon icon="add" size="40"></ng-md-icon>
-	        </md-button>
-	      </div>
-	    </md-toolbar>
-
-	    <br>
-
-	    <!-- Page View -->
-	    <div ng-include="view"></div>
-	    <md-progress-circular class="md-warn md-hue-3 app-loading" md-mode="indeterminate" ng-show="loading"></md-progress-circular>
-
-	</md-content>
-
+    <div id="react-container"></div>
+    <script src="js/component.js" type="text/jsx" ></script>
 </body>
 </html>
