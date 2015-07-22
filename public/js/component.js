@@ -238,55 +238,89 @@ var MyReactComponent = React.createClass({
 });
 
 
-var items = [
+var availableItems = [
 	{
-		id: "item1",
-		name: "Item One"
+		id: "item-start-time",
+		name: "Start Time"
 	},
 	{
-		id: "item2",
-		name: "Item Two"
+		id: "item-stop-time",
+		name: "Stop Time"
 	},
 	{
-		id: "item3",
-		name: "Item Three"
+		id: "item-per-point",
+		name: "Per Point"
 	},
 	{
-		id: "item4",
-		name: "Item Four"
+		id: "item-initial-margin",
+		name: "Initial Margin"
 	},
 	{
-		id: "item5",
-		name: "Item Five"
+		id: "item-symbol-and-description",
+		name: "Symbol and Description"
 	},
 	{
-		id: "item6",
-		name: "Item Six"
+		id: "item-change-percent",
+		name: "Change %"
 	},
 	{
-		id: "item7",
-		name: "Item Seven"
+		id: "item-change",
+		name: "Change"
 	},
 	{
-		id: "item8",
-		name: "Item Eight"
+		id: "item-last",
+		name: "Last"
 	},
 	{
-		id: "item9",
-		name: "Item Nine"
+		id: "item-last-volume",
+		name: "Last Volume"
 	},
 	{
-		id: "item10",
-		name: "Item Ten"
+		id: "item-bid",
+		name: "Bid"
+	},
+	{
+		id: "item-bid-size",
+		name: "Bid Size"
+	},
+	{
+		id: "item-ask",
+		name: "Ask"
+	},
+	{
+		id: "item-ask-size",
+		name: "Ask Size"
+	},
+	{
+		id: "item-total-volume",
+		name: "Total Volume"
+	},
+	{
+		id: "item-high",
+		name: "High"
+	},
+	{
+		id: "item-fun-factor",
+		name: "Fun Factor"
 	}
 ]
 
 var visibleItems = [
-	'item2',
-	'item4',
-	'item6',
-	'item8'
+	"item-symbol-and-description",
+	"item-change-percent",
+	"item-change",
+	"item-last",
+	"item-last-volume",
+	"item-bid",
+	"item-bid-size",
+	"item-ask",
+	"item-ask-size",
+	"item-total-volume",
+	"item-high",
+	"item-fun-factor",
 ]
+
+var fixed = 1;
 
 document.addEventListener('save', function(e){
 	console.log(e);
@@ -297,7 +331,7 @@ React.render(
 	<MyReactComponent
 		title="Configure Data Fields"
 		details="Drag & drop between columns to configure visible data."
-		available={items}
+		available={availableItems}
 		visible={visibleItems}
-		locked={3}/>, 
+		locked={fixed}/>, 
 	document.getElementById('react-container'));

@@ -10,14 +10,14 @@
     "express": "~4.9.x",
     "react": "~0.13.x",
     "react-bootstrap": "~0.23.x",
-    "react-dnd": "~1.1.x"
+    "gulp": "~3.9.x"
   },
   "engines": {
     "node": "0.10.x"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/MosiddiDev/mosi-react"
+    "url": "https://github.com/MosiddiDev/react-application"
   },
   "keywords": [
     "node",
