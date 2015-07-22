@@ -260,8 +260,7 @@ var MyReactComponent = React.createClass({
 var availableItems = [
 	{
 		id: "item-start-time",
-		name: "Start Time",
-		glyph: "plus"
+		name: "Start Time"
 	},
 	{
 		id: "item-stop-time",
