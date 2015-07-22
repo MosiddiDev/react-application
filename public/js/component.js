@@ -44,6 +44,9 @@ var MyListComponent = React.createClass({
 	updateLock: function(number){
 		this.setState({locked: number});
 	},
+	getTargetData: function(target){
+		return {id: target.id, name: target.textContent, glyph: target.getAttribute('data-glyph')};
+	},
 	getSimpleList: function(){
 		var list = []
 
@@ -91,7 +94,7 @@ var MyListComponent = React.createClass({
 		// For FF (that sneaky Fox is picky)
 		e.dataTransfer.setData("text/html", e.currentTarget);
 
-		this.space().dragData = {id: e.target.id, name: e.target.textContent};
+		this.space().dragData = this.getTargetData(e.target);
 		this.space().dropAction = (function(target) {
 			this.removeOn(target);
 		}).bind(this, this.space().dragData);
@@ -116,7 +119,7 @@ var MyListComponent = React.createClass({
 			return;
 		}
 
-		this.dropTarget = {id: e.target.id, name: e.target.textContent};
+		this.dropTarget = this.getTargetData(e.target);
 		this.setPlaceHolder(this.dropTarget);
 	},
 	leave: function(e){
@@ -157,9 +160,9 @@ var MyListComponent = React.createClass({
 	        	<RB.ListGroup>
 	        	{	
 					this.state.list.map(function(listItem, index, array) {
-						var locked = index<this.state.locked ? 'glyphicon glyphicon-lock locked' : '';
+						var locked = index<this.state.locked ? 'glyphicon glyphicon-lock locked' : ( (listItem.glyph && 'glyphicon glyphicon-'+listItem.glyph) || '');
 		                return (
-		                	<RB.ListGroupItem className={"list-item "+locked} id={listItem.id} onDragStart={this.drag} onDrop={this.drop} onDragOver={this.over} onDragLeave={this.leave} onDoubleClick={this.toggleLock} draggable="true">
+		                	<RB.ListGroupItem className={"list-item "+locked} data-glyph={listItem.glyph} id={listItem.id} onDragStart={this.drag} onDrop={this.drop} onDragOver={this.over} onDragLeave={this.leave} onDoubleClick={this.toggleLock} draggable="true">
 		                		{listItem.name}
 		                	</RB.ListGroupItem>
 		                )
@@ -241,7 +244,8 @@ var MyReactComponent = React.createClass({
 var availableItems = [
 	{
 		id: "item-start-time",
-		name: "Start Time"
+		name: "Start Time",
+		glyph: "align-justify"
 	},
 	{
 		id: "item-stop-time",

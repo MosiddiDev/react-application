@@ -109,7 +109,7 @@
 	margin-top: 10px;
 }
 
-.glyphicon-lock:before {
+.glyphicon:before {
   position: absolute;
   left: 30px;
   bottom: 11px;
