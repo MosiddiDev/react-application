@@ -6,7 +6,7 @@ app.set('port', (process.env.PORT || 5001));
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/node_modules'));
 
-app.get('/mosi-react', function(req, res) {
+app.get('/', function(req, res) {
   res.sendfile('./public/index.html');
 });
 

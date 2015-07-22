@@ -1,9 +1,12 @@
-/*
-
 *{
-	background: #2c3e50 !important;
-	color: #ecf0f1;
-}*/
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
 .head1{
 	color: #ecf0f1;
 	font-size: 18px;
@@ -18,7 +21,7 @@
 	height: 20px;
 }
 
-div.component{
+.react-component{
 	position: relative;
 	height: 500px;
 	width: 600px;
@@ -50,14 +53,12 @@ div.component{
 	width: 50%;
 	float: left;
 	border-right: 1px dashed darkgray;
-	/*overflow-y: scroll;*/
 }
 
 .visible{
 	height: 100%;
 	width: 50%;
 	float: right;
-	/*overflow-y: scroll;*/
 }
 
 .list-item{
@@ -66,6 +67,15 @@ div.component{
 	border: none;
 	border-radius: 0;
 	cursor: pointer;
+	padding-left: 55px;
+	font-family: inherit;
+	font-style: normal;
+	font-size: inherit;
+	line-height: inherit;
+	font-weight: inherit;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .list-item:hover{
@@ -74,16 +84,12 @@ div.component{
 }
 
 .list-item.locked{
-	color: red;
-	opacity: .65;
+	color: #7f8c8d;
+	opacity: .75;
 }
 
-.list-item-end, .locked-icon{
+.list-item-end{
 	opacity: 0;
-}
-
-.locked .locked-icon{
-	opacity: 1;
 }
 
 #list-item-drop{
@@ -101,4 +107,11 @@ div.component{
 	color: lightgray;
 	margin-right: 10px;
 	margin-top: 10px;
+}
+
+.glyphicon-lock:before {
+  position: absolute;
+  left: 30px;
+  bottom: 11px;
+  font-family: 'Glyphicons Halflings';
 }

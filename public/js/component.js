@@ -35,10 +35,23 @@ var MyListComponent = React.createClass({
 		return ( window[sharedGlobalNameSpace] ||  ( window[sharedGlobalNameSpace] = {} ) )
 	},
 	getInitialState: function(){
-		return {list: this.props.items};
+		var locked = this.props.lockEnabled ? (this.props.locked || 0) : 0;
+		return {list: this.props.items, locked: locked};
 	},
 	updateList: function(list){
 		this.setState({list: list});
+	},
+	updateLock: function(number){
+		this.setState({locked: number});
+	},
+	getSimpleList: function(){
+		var list = []
+
+		for(var i=0; i<this.state.list.length; i++){
+			list.push(this.state.list[i]['id']);
+		}
+
+		return list;
 	},
 	removeOn: function(listItem){
 		var list = this.state.list;
@@ -78,10 +91,10 @@ var MyListComponent = React.createClass({
 		// For FF (that sneaky Fox is picky)
 		e.dataTransfer.setData("text/html", e.currentTarget);
 
-		this.space().dragData = {id: e.target.id, name: e.target.textContent}
+		this.space().dragData = {id: e.target.id, name: e.target.textContent};
 		this.space().dropAction = (function(target) {
 			this.removeOn(target);
-		}).bind(this, this.space().dragData)
+		}).bind(this, this.space().dragData);
 	},
 	drop: function (e){
 		if(this.isLocked(e.target)){
@@ -104,7 +117,6 @@ var MyListComponent = React.createClass({
 		}
 
 		this.dropTarget = {id: e.target.id, name: e.target.textContent};
-		console.log(this.dropTarget);
 		this.setPlaceHolder(this.dropTarget);
 	},
 	leave: function(e){
@@ -131,17 +143,9 @@ var MyListComponent = React.createClass({
 			if(listItems[i].classList.contains('lockPivot')){
 				e.target.classList.remove('lockPivot');
 				if(listItems[i].classList.contains('locked'))
-					return this.lock(listItems, listItems.slice(0,i));
-				return this.lock(listItems, listItems.slice(0,i+1));
+					return this.updateLock(i);
+				return this.updateLock(i+1);
 			}
-		}
-	},
-	lock: function(allListItems, lockListItems){
-		for(var i=0; i<allListItems.length; i++){
-			allListItems[i].classList.remove('locked');
-		}
-		for(var i=0; i<lockListItems.length; i++){
-			lockListItems[i].classList.add('locked');
 		}
 	},
 	isLocked: function(target){
@@ -153,8 +157,9 @@ var MyListComponent = React.createClass({
 	        	<RB.ListGroup>
 	        	{	
 					this.state.list.map(function(listItem, index, array) {
+						var locked = index<this.state.locked ? 'glyphicon glyphicon-lock locked' : '';
 		                return (
-		                	<RB.ListGroupItem className="list-item" id={listItem.id} onDragStart={this.drag} onDrop={this.drop} onDragOver={this.over} onDragLeave={this.leave} onDoubleClick={this.toggleLock} draggable="true">
+		                	<RB.ListGroupItem className={"list-item "+locked} id={listItem.id} onDragStart={this.drag} onDrop={this.drop} onDragOver={this.over} onDragLeave={this.leave} onDoubleClick={this.toggleLock} draggable="true">
 		                		{listItem.name}
 		                	</RB.ListGroupItem>
 		                )
@@ -190,19 +195,18 @@ var MyReactComponent = React.createClass({
 		};
 	},
     save: function() {
-        alert('saving column configuration');
-  //       this.setState({
-		// 	available: this.state.available,
-		// 	visible: this.state.visible,
-		// 	locked: this.props.locked,
-		// });
+    	var ref = this.refs;
+    	var data = { 'visible': ref.visible.getSimpleList(), 'locked': ref.visible.state.locked }
+    	var event = new Event('save', {'detail': this});
+    	event.data = data;
+    	document.dispatchEvent(event);
     },
     close: function() {
-        alert('closing component');
+        alert('Closing component');
     },
     render: function() {
         return (
-            <div className="component">
+            <div className="react-component">
                 <span className="header">
                     <RB.Glyphicon glyph='remove' className="close-icon" bsSize="large" onClick={this.close}/>
                     <p className="head1">{this.props.title}</p>
@@ -212,12 +216,12 @@ var MyReactComponent = React.createClass({
                 <div className="content">
                 	<div className="available">
                 		<p className="head2">Available</p>
-                		<MyListComponent items={this.state.available}/>
+                		<MyListComponent ref="available" items={this.state.available}/>
                 	</div>
                 	
                 	<div className="visible">
                 		<p className="head2">Visible</p>
-                		<MyListComponent lockEnabled={true} locked={this.state.locked} items={this.state.visible}/>
+                		<MyListComponent ref="visible" lockEnabled={true} locked={this.state.locked} items={this.state.visible}/>
                 		
                 	</div>
                 </div>
@@ -232,6 +236,7 @@ var MyReactComponent = React.createClass({
         );
     }
 });
+
 
 var items = [
 	{
@@ -282,6 +287,11 @@ var visibleItems = [
 	'item6',
 	'item8'
 ]
+
+document.addEventListener('save', function(e){
+	console.log(e);
+	alert('Triggered by "save" event.\n\nVisible: ' + e.data.visible.toString() + '\nFixed: ' + e.data.locked);
+});
 
 React.render(
 	<MyReactComponent
