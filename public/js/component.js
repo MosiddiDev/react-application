@@ -1,3 +1,5 @@
+var RB = ReactBootstrap;
+
 //********************//
 //***** My SHims *****//
 //********************//
@@ -32,7 +34,7 @@ var MyListComponent = React.createClass({
 		var sharedGlobalNameSpace = this.props && this.props.space || 'DefaultSharedGlobalNameSpace';
 		return ( window[sharedGlobalNameSpace] ||  ( window[sharedGlobalNameSpace] = {} ) )
 	},
-	getInitialState: function() {
+	getInitialState: function(){
 		return {list: this.props.items};
 	},
 	updateList: function(list){
@@ -76,27 +78,47 @@ var MyListComponent = React.createClass({
 		// For FF (that sneaky Fox is picky)
 		e.dataTransfer.setData("text/html", e.currentTarget);
 
-		this.dragData = {id: e.target.id, name: e.target.textContent}
+		this.space().dragData = {id: e.target.id, name: e.target.textContent}
+		this.space().dropAction = (function(target) {
+			this.removeOn(target);
+		}).bind(this, this.space().dragData)
 	},
 	drop: function (e){
-		if(this.space().dropTargetAction){
-			this.removeOn(this.dragData);
-			this.space().dropTargetAction(this.dragData);
-		}
-	},
-	over: function (e){
-		delete this.space().dropTargetAction;
-
 		if(this.isLocked(e.target)){
 			e.preventDefault();
 			return;
 		}
 
-		var dropTarget = {id: e.target.id, name: e.target.textContent};
+		if(this.dropTarget){
+			this.space().dropAction();
+			this.addOn(this.dropTarget, this.space().dragData);
+			this.removePlaceHolder();
+			delete this.dropTarget;
+		}
+	},
+	over: function (e){
+		e.preventDefault();
 
-		this.space().dropTargetAction = (function(dropTarget, newItem) {
-			this.addOn(dropTarget, newItem);
-		}).bind(this, dropTarget)
+		if(this.isLocked(e.target)){
+			return;
+		}
+
+		this.dropTarget = {id: e.target.id, name: e.target.textContent};
+		console.log(this.dropTarget);
+		this.setPlaceHolder(this.dropTarget);
+	},
+	leave: function(e){
+		this.removePlaceHolder();
+		delete this.dropTarget;
+	},
+	setPlaceHolder: function(target){
+		if(target.id != 'list-item-drop'){
+			this.removePlaceHolder();
+			this.addOn({id:target.id}, {id:'list-item-drop', name:'Drop Here!'});
+		}
+	},
+	removePlaceHolder: function(){
+		this.removeOn({id:'list-item-drop'});
 	},
 	toggleLock: function(e){
 		if(!this.props.lockEnabled)
@@ -128,12 +150,18 @@ var MyListComponent = React.createClass({
 	render: function(){
         return (
         	<div className="list">
-        	{	
-				this.state.list.map(function(listItem, index, array) {
-	                return (<div className="list-item" id={listItem.id} onDragStart={this.drag} onDragEnd={this.drop} onDragOver={this.over} onDoubleClick={this.toggleLock} draggable="true">{listItem.name}</div>)
-	            },this)
-        	}
-        	<div className="list-item-end" id="list-item-end" onDragOver={this.over}>HEY</div>
+	        	<RB.ListGroup>
+	        	{	
+					this.state.list.map(function(listItem, index, array) {
+		                return (
+		                	<RB.ListGroupItem className="list-item" id={listItem.id} onDragStart={this.drag} onDrop={this.drop} onDragOver={this.over} onDragLeave={this.leave} onDoubleClick={this.toggleLock} draggable="true">
+		                		{listItem.name}
+		                	</RB.ListGroupItem>
+		                )
+		            },this)
+	        	}
+	        	<RB.ListGroupItem className="list-item-end" id="list-item-end" onDragOver={this.over}>END</RB.ListGroupItem>
+	        	</RB.ListGroup>
         	</div>
         );
     }
@@ -145,51 +173,60 @@ var MyListComponent = React.createClass({
 //*******************************//
 
 var MyReactComponent = React.createClass({
-	initItems: function(){
-		this.visible = [];
+	getInitialState: function() {
+		var visible = [];
 		
 		for(i in this.props.visible){
 			for(j in this.props.available){
 				if(this.props.available[j]['id'] === this.props.visible[i])
-					this.visible.push(this.props.available.splice(j,1)[0]);
+					visible.push(this.props.available.splice(j,1)[0]);
 			}
 		}
 
-		this.available = this.props.available;
-	},
-	getVisibleItems: function(){
-		var visible = []
+		return {
+			available: this.props.available,
+			visible: visible,
+			locked: this.props.locked,
+		};
 	},
     save: function() {
         alert('saving column configuration');
+  //       this.setState({
+		// 	available: this.state.available,
+		// 	visible: this.state.visible,
+		// 	locked: this.props.locked,
+		// });
     },
     close: function() {
         alert('closing component');
     },
     render: function() {
-    	this.initItems();
         return (
             <div className="component">
                 <span className="header">
-                    <button onClick={this.close}
-                            className="btn btn-danger glyphicon glyphicon-trash"/>
+                    <RB.Glyphicon glyph='remove' className="close-icon" bsSize="large" onClick={this.close}/>
+                    <p className="head1">{this.props.title}</p>
+        			<p className="head2">{this.props.details}</p>
                 </span>
                 
                 <div className="content">
                 	<div className="available">
-                		<MyListComponent items={this.props.available}/>
+                		<p className="head2">Available</p>
+                		<MyListComponent items={this.state.available}/>
                 	</div>
                 	
                 	<div className="visible">
-                		<MyListComponent lockEnabled={true} locked={this.props.fixed} items={this.visible}/>
+                		<p className="head2">Visible</p>
+                		<MyListComponent lockEnabled={true} locked={this.state.locked} items={this.state.visible}/>
+                		
                 	</div>
                 </div>
                 
                 <span className="footer">
-                    <button onClick={this.save}
-                            className="btn btn-primary glyphicon glyphicon-pencil"/>
-                    <button onClick={this.close}
-                            className="btn btn-danger glyphicon glyphicon-trash"/>
+                    <RB.ButtonToolbar className="button-toolbar">
+						<RB.Button bsStyle='primary' onClick={this.save}>Save</RB.Button>
+						<RB.Button onClick={this.close}>Cancel</RB.Button>
+				    </RB.ButtonToolbar>
                 </span>
             </div>
         );
@@ -246,5 +283,11 @@ var visibleItems = [
 	'item8'
 ]
 
-React.render(<MyReactComponent available={items} visible={visibleItems} fixed={3}/>, 
+React.render(
+	<MyReactComponent
+		title="Configure Data Fields"
+		details="Drag & drop between columns to configure visible data."
+		available={items}
+		visible={visibleItems}
+		locked={3}/>, 
 	document.getElementById('react-container'));
