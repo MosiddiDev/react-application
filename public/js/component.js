@@ -154,6 +154,22 @@ var MyListComponent = React.createClass({
 	isLocked: function(target){
 		return target.classList.contains('locked');
 	},
+	hover: function(e){
+		// Don't change glyph if one already exists
+		if(this.isLocked(e.target) || e.target.getAttribute('data-glyph'))
+			return;
+
+		e.target.classList.toggle('glyphicon', true);
+		e.target.classList.toggle('glyphicon-align-justify', true);
+	},
+	hoverOut: function(e){
+		// Don't change glyph if one already exists
+		if(this.isLocked(e.target) || e.target.getAttribute('data-glyph'))
+			return;
+
+		e.target.classList.remove('glyphicon');
+		e.target.classList.remove('glyphicon-align-justify');
+	},
 	render: function(){
         return (
         	<div className="list">
@@ -162,7 +178,7 @@ var MyListComponent = React.createClass({
 					this.state.list.map(function(listItem, index, array) {
 						var locked = index<this.state.locked ? 'glyphicon glyphicon-lock locked' : ( (listItem.glyph && 'glyphicon glyphicon-'+listItem.glyph) || '');
 		                return (
-		                	<RB.ListGroupItem className={"list-item "+locked} data-glyph={listItem.glyph} id={listItem.id} onDragStart={this.drag} onDrop={this.drop} onDragOver={this.over} onDragLeave={this.leave} onDoubleClick={this.toggleLock} draggable="true">
+		                	<RB.ListGroupItem className={"list-item "+locked} data-glyph={listItem.glyph} id={listItem.id} onDragStart={this.drag} onDrop={this.drop} onDragOver={this.over} onDragLeave={this.leave} onDoubleClick={this.toggleLock} onMouseOver={this.hover} onMouseOut={this.hoverOut} draggable="true">
 		                		{listItem.name}
 		                	</RB.ListGroupItem>
 		                )
@@ -245,7 +261,7 @@ var availableItems = [
 	{
 		id: "item-start-time",
 		name: "Start Time",
-		glyph: "align-justify"
+		glyph: "plus"
 	},
 	{
 		id: "item-stop-time",
