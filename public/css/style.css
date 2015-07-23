@@ -109,7 +109,7 @@
 	margin-top: 10px;
 }
 
-.glyphicon:before {
+.list-item.glyphicon:before {
   position: absolute;
   left: 30px;
   bottom: 11px;
